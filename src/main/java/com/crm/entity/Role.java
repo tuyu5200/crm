@@ -19,6 +19,7 @@ public class Role {
     private Dept dept;
     private Company company;
     private Set<RoleResource> roleResources;
+    private Set<User> users;
 
     @Id
     @Column(name = "id")
@@ -125,7 +126,6 @@ public class Role {
         this.roleResources = roleResources;
     }
 
-    private Set<User> users;
 
     @ManyToMany(mappedBy = "roles")
     public Set<User> getUsers() {

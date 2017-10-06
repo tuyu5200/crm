@@ -1,6 +1,7 @@
 package com.crm.controller.sys;
 
 import com.crm.beans.DeptBean;
+import com.crm.beans.RoleBean;
 import com.crm.entity.Company;
 import com.crm.entity.Dept;
 import com.crm.entity.User;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author walker tu
@@ -24,23 +25,22 @@ import java.util.Set;
 @Controller
 @RequestMapping("sys/dept/")
 public class DeptController {
-    private String url = "redirect:/sys/dept/queryAll.do";
 
     @Autowired
     private DeptService deptService;
     @Autowired
     private UserService userService;
 
-    //TODO:添加部门未完成
     @RequestMapping("addDept.do")
     public String addDept(Dept dept, int userId) {
         User user = this.userService.queryById(userId);
         Company company = user.getCompany();
-        Set<Dept> depts = company.getDepts();
-        depts.add(dept);
-        this.userService.update(user);
-        return this.url;
+        dept.setCompanies(new HashSet<>());
+        dept.getCompanies().add(company);
+        this.deptService.save(dept);
+        return "redirect:/sys/dept/queryAll.do?id=" + userId;
     }
+
 
     @RequestMapping("queryAll.do")
     public ModelAndView queryAll(User user) {
@@ -49,15 +49,18 @@ public class DeptController {
     }
 
     @RequestMapping("updateDept.do")
-    public String updateDept(Dept dept) {
-        this.deptService.update(dept);
-        return this.url;
+    public String updateDept(Dept dept, Integer userId) {
+        Dept dept1 = this.deptService.queryById(dept.getId());
+        dept1.setDname(dept.getDname());
+        dept1.setDescription(dept.getDescription());
+        this.deptService.update(dept1);
+        return "redirect:/sys/dept/queryAll.do?id=" + userId;
     }
 
     @RequestMapping("deleteDept.do")
-    public String deleteDept(int id) {
+    public String deleteDept(Integer id, Integer userId) {
         this.deptService.delete(id);
-        return this.url;
+        return "redirect:/sys/dept/queryAll.do?id=" + userId;
     }
 
     @RequestMapping("queryById.do")
@@ -65,5 +68,17 @@ public class DeptController {
     public DeptBean queryById(int id) throws IOException {
         Dept dept = this.deptService.queryById(id);
         return new DeptBean(dept);
+    }
+
+    /**
+     * 查询该部门下所有的角色信息
+     *
+     * @param deptId 部门id
+     * @return
+     */
+    @RequestMapping("queryAllRoles.do")
+    @ResponseBody
+    public List<RoleBean> queryAllRoles(Integer deptId) {
+        return this.deptService.queryAllRolesByDeptId(deptId);
     }
 }

@@ -19,4 +19,9 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements RoleDao {
         return this.getSession().createQuery("from Role r where r.id in :ids").setParameterList("ids", ids).list();
     }
 
+    @Override
+    public List<Role> queryAllWithCompanyId(Integer companyId) {
+        return this.getSession().createQuery("from Role r where r.company.id=?").setParameter(0, companyId).list();
+    }
+
 }

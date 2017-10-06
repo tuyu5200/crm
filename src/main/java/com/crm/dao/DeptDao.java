@@ -10,4 +10,5 @@ import com.crm.entity.Dept;
  */
 public interface DeptDao extends BaseDao<Dept> {
 
+    Dept queryByDname(String dname);
 }

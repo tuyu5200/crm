@@ -3,9 +3,7 @@ package com.crm.beans;
 import com.crm.entity.Resource;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 /**
  * @author walker tu
@@ -16,31 +14,19 @@ import java.util.Set;
 public class ResourceBean {
     private int id;
     private String name;
-    private String title;
-    private String href;
-    private String target;
-    private String constant;
-    private Integer shown;
-    private Integer enabled;
-    private Integer type;
-    private ResourceBean parent;
-    private List<ResourceBean> childes;
+    private boolean enabled = true;
+    private Integer parent = 0;
+    private boolean checked = false;
 
     public ResourceBean(Resource resource) {
+        if (Objects.isNull(resource)) {
+            throw new IllegalArgumentException("resource对象不能为空");
+        }
         this.id = resource.getId();
         this.name = resource.getName();
-        this.title = resource.getTitle();
-        this.href = resource.getHref();
-        this.target = resource.getTarget();
-        this.constant = resource.getConstant();
-        this.shown = resource.getShown();
-        this.enabled = resource.getEnabled();
-        this.type = resource.getType();
-        this.parent = new ResourceBean(resource.getParent());
-        this.childes = new ArrayList<>();
-        Set<Resource> resources = resource.getResources();
-        for (Resource r : resources) {
-            this.childes.add(new ResourceBean(r));
+        if (!Objects.isNull(resource.getParent())) {
+            this.parent = resource.getParent().getId();
         }
+        this.enabled = resource.getEnabled() == 1;
     }
 }

@@ -39,4 +39,10 @@ public interface UserService extends BaseService<User> {
      */
     List<User> queryByCompany(int companyId);
 
+    /**
+     * 为用户分配角色
+     *
+     * @param roleIds 角色id数组
+     */
+    void allocRoles(Integer userId, Integer[] roleIds);
 }

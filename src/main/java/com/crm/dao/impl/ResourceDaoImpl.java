@@ -31,7 +31,7 @@ public class ResourceDaoImpl extends BaseDaoImpl<Resource> implements ResourceDa
 
     @Override
     public List<Resource> queryByIds(Integer[] ids) {
-        return this.getSession().createQuery("from  Resource r where r.id in :ids").setParameterList("ids", ids).list();
+        return this.getSession().createQuery("from  Resource r where r.id in (:ids)").setParameterList("ids", ids).list();
     }
 
 }

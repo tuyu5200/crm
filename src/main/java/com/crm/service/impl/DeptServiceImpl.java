@@ -1,10 +1,12 @@
 package com.crm.service.impl;
 
 import com.crm.beans.DeptBean;
+import com.crm.beans.RoleBean;
 import com.crm.dao.DeptDao;
 import com.crm.dao.UserDao;
 import com.crm.entity.Company;
 import com.crm.entity.Dept;
+import com.crm.entity.Role;
 import com.crm.entity.User;
 import com.crm.service.DeptService;
 import com.crm.service.base.impl.BaseServiceImpl;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author walker tu
@@ -50,5 +53,22 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
             }
         }
         return deptBeans;
+    }
+
+    @Override
+    public List<RoleBean> queryAllRolesByDeptId(Integer deptId) {
+        Set<Role> roles = this.deptDao.queryById(deptId).getRoles();
+        List<RoleBean> roleBeans = new ArrayList<>();
+        List<Role> roleList = new ArrayList<>();
+        roleList.addAll(roles);
+        for (int i = 0; i < roleList.size(); i++) {
+            roleBeans.add(new RoleBean(roleList.get(i)));
+        }
+        return roleBeans;
+    }
+
+    @Override
+    public Dept queryByDname(String dname) {
+        return this.deptDao.queryByDname(dname);
     }
 }

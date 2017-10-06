@@ -1,6 +1,8 @@
 package com.crm.service.impl;
 
+import com.crm.dao.RoleDao;
 import com.crm.dao.UserDao;
+import com.crm.entity.Role;
 import com.crm.entity.User;
 import com.crm.service.UserService;
 import com.crm.service.base.impl.BaseServiceImpl;
@@ -9,11 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
     private UserDao userDao;
+    @Autowired
+    private RoleDao roleDao;
 
     @Autowired
     public void setUserDao(UserDao userDao) {
@@ -39,5 +44,16 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Override
     public List<User> queryByCompany(int companyId) {
         return this.userDao.queryByCompany(companyId);
+    }
+
+    @Override
+    public void allocRoles(Integer userId, Integer[] roleIds) {
+        if (!Objects.isNull(roleIds) && roleIds.length > 0) {
+            User user = this.userDao.queryById(userId);
+            user.getRoles().clear();
+            List<Role> roleList = this.roleDao.queryByIds(roleIds);
+            user.getRoles().addAll(roleList);
+            this.userDao.update(user);
+        }
     }
 }

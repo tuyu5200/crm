@@ -18,6 +18,14 @@ public interface RoleDao extends BaseDao<Role> {
      * @param ids
      * @return
      */
+    @Override
     List queryByIds(Integer[] ids);
 
+    /**
+     * 查询指定公司下所有的角色信息
+     *
+     * @param companyId 公司id
+     * @return
+     */
+    List<Role> queryAllWithCompanyId(Integer companyId);
 }

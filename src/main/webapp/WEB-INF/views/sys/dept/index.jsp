@@ -13,11 +13,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>用户登录</title>
+    <title>部门管理</title>
     <base href="<%=basePath%>">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -73,11 +74,12 @@
                     <h3 class="panel-title">首页</h3>
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item">公司管理</li>
+                    <li class="list-group-item"><a href="/sys/company/queryAll.do">公司管理</a></li>
                     <li class="list-group-item active">部门管理</li>
                     <li class="list-group-item">菜单管理</li>
                     <li class="list-group-item">服务管理</li>
-                    <li class="list-group-item ">用户管理</li>
+                    <li class="list-group-item"><a href="/sys/user/queryAllUser.do">用户管理</a></li>
+                    <li class="list-group-item"><a href="/sys/role/queryAll.do">角色管理</a></li>
                 </ul>
                 <div class="panel-body">
                 </div>
@@ -122,12 +124,33 @@
                                         data-id="${dept.id}">
                                     修改
                                 </button>
-                                <a class="btn btn-danger btn-xs" href="/sys/dept/deleteDept.do?userId=${dept.id}">删除</a>
+                                <a class="btn btn-danger btn-xs" href="#"
+                                   data-href="/sys/dept/deleteDept.do?id=${dept.id}&userId=${sessionScope.user.id}"
+                                   data-toggle="modal"
+                                   data-target="#confirm-delete">删除</a>
                             </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+<%--删除时的确认框--%>
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                请确认
+            </div>
+            <div class="modal-body">
+                确认删除该记录吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <a class="btn btn-danger btn-ok">删除记录</a>
             </div>
         </div>
     </div>
@@ -147,6 +170,14 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">所属公司</label>
+                                    <div class="col-sm-4">
+                                        <%--<input type="hidden" name="companyId" value="${depts.get(0).company.id}">--%>
+                                        <input type="text" value="${depts.get(0).company.cname}" class="form-control"
+                                               readonly>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <input type="hidden" value="${sessionScope.user.id}" name="userId">
                                     <label class="col-sm-2 control-label">部门名称</label>
@@ -191,7 +222,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="hidden" id="update-id">
+                                    <input type="hidden" id="update-id" name="id">
+                                    <input type="hidden" name="userId" value="${sessionScope.user.id}">
                                     <label class="col-sm-2 control-label">部门名称</label>
                                     <div class="col-sm-4">
                                         <input type="text" name="dname" id="update-name" value="" class="form-control"
@@ -221,6 +253,7 @@
 </div>
 </body>
 </html>
+<script src="/assets/js/confirm-delete.js"></script>
 <script>
     //绑定按钮的click事件   当click事件发生以后  去绑定shown.bs.modal事件  当事件被触发以后  则用Ajax去加载数据  进行显示
     $(function () {

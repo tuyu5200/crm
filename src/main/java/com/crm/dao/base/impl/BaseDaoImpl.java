@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author walker tu
@@ -32,7 +33,11 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void save(T t) {
+        if (t == null) {
+            throw new IllegalArgumentException("参数不正确");
+        }
         this.getSession().save(t);
+        this.getSession().flush();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -44,6 +49,9 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void update(T t) {
+        if (t == null) {
+            throw new IllegalArgumentException("参数不正确");
+        }
         this.getSession().update(t);
         //加上这句就可以了，直接提交到数据库，不对缓存进行操作。不然就是对缓存进行操作。
         this.getSession().flush();
@@ -54,6 +62,9 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
     }
 
     public T queryById(int id) {
+        if (Objects.isNull(id)) {
+            throw new IllegalArgumentException("参数不正确");
+        }
         return (T) this.getSession().get(this.clazz, id);
     }
 
@@ -70,4 +81,12 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
         this.clazz = (Class<T>) types[0];
     }
 
+    @Override
+    public List<T> queryByIds(Integer[] ids) {
+        String clazzName = this.clazz.getSimpleName();
+        if (ids == null || ids.length < 1) {
+            throw new IllegalArgumentException("参数不正确");
+        }
+        return this.getSession().createQuery("from " + clazzName + " t where t.id in (:ids)").setParameterList("ids", ids).list();
+    }
 }

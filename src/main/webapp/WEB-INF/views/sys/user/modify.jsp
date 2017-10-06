@@ -25,12 +25,17 @@
         <div class="col-md-6 col-lg-offset-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <strong>修改用户${user.username }的资料</strong>
+                    <strong>修改用户${updatingUser.name }的资料</strong>
                     <div class="btn-toolbar pull-right" style="margin-top: -5px;">
                         <div class="btn-group">
                             <button class="btn btn-warning btn-sm">
-                                <span class="glyphicon glyphicon-repeat"></span>
-                                返回
+                                <span class="glyphicon glyphicon-arrow-left"></span>
+                                <span id="goback">返回</span>
+                                <script>
+                                    $('#goback').one('click', function () {
+                                        history.back();
+                                    })
+                                </script>
                             </button>
                         </div>
                     </div>
@@ -42,12 +47,34 @@
                                 <div class="row">
                                     <div class="col-md-10">
                                         <div class="form-group">
-                                            <<input type="hidden" name="id" value="${updatingUser.id}">
+                                            <input type="hidden" name="id" value="${updatingUser.id}">
                                             <label class="col-sm-2 control-label">员工姓名</label>
                                             <div class="col-sm-4">
                                                 <input type="text" name="name" value="${updatingUser.name}"
                                                        class="form-control"
                                                        placeholder="员工姓名">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">所属公司</label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" name="companyId">
+                                                    <option value="-1">-请选择-</option>
+                                                    <c:forEach items="${companies}" var="company">
+                                                        <option value="${company.id}" ${updatingUser.company.id==company.id?'selected':''}>${company.cname}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">所属部门</label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" name="deptId">
+                                                    <option value="-1">-请选择-</option>
+                                                    <c:forEach items="${depts}" var="dept">
+                                                        <option value="${dept.id}" ${updatingUser.dept.id==dept.id?'selected':''}>${dept.dname}</option>
+                                                    </c:forEach>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -132,6 +159,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>

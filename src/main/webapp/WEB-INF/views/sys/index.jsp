@@ -38,7 +38,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">用户管理 <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">角色管理</a></li>
+                <li><a href="">角色管理</a></li>
                 <li><a href="#">资源管理</a></li>
 
             </ul>
@@ -78,6 +78,7 @@
                     <li class="list-group-item">菜单管理</li>
                     <li class="list-group-item">服务管理</li>
                     <li class="list-group-item"><a href="/sys/user/queryAllUser.do">用户管理</a></li>
+                    <li class="list-group-item"><a href="/sys/role/queryAll.do">角色管理</a></li>
                 </ul>
                 <div class="panel-body">
                 </div>
