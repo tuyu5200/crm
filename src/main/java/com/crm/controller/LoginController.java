@@ -48,10 +48,10 @@ public class LoginController {
 
         User user = this.userService.queryByUsername(username);
         if (Objects.equals(user.getEnabled(), 0)) {
-            return new ModelAndView("redirect:login.jsp", "message", "账号被禁用，请联系管理员");
+            return new ModelAndView("forward:login.jsp", "message", "账号被禁用，请联系管理员");
         }
         if (Objects.equals(user.getLocked(), 1)) {
-            return new ModelAndView("redirect:login.jsp", "message", "账号被锁定，请联系管理员");
+            return new ModelAndView("forward:login.jsp", "message", "账号被锁定，请联系管理员");
         }
         session.setAttribute("user", user);
         List<Role> roles = new ArrayList<>();
@@ -59,10 +59,10 @@ public class LoginController {
         for (int i = 0; i < roles.size(); i++) {
             if (Objects.equals(roles.get(i).getRoleConstant().getName(), "SUPER_ADMIN")) {
                 request.setAttribute("users", this.userService.queryAll());
-                return new ModelAndView("sys/index.jsp");
+                return new ModelAndView("redirect:sysIndex.do");
             }
         }
-        return new ModelAndView("sys/index.jsp");
+        return new ModelAndView("redirect:sysIndex.do");
     }
 
     /**
@@ -75,5 +75,15 @@ public class LoginController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login.jsp";
+    }
+
+    /**
+     * 重新登陆
+     *
+     * @return
+     */
+    @RequestMapping("relogin.do")
+    public ModelAndView reLogin() {
+        return new ModelAndView("forward:/login.jsp", "message", "请登录");
     }
 }

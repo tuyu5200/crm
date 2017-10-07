@@ -9,7 +9,10 @@ import com.crm.service.RoleResourceService;
 import com.crm.service.base.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -18,6 +21,7 @@ import java.util.Objects;
  * @description：
  */
 @Service
+@Transactional(readOnly = true)
 public class RoleResourceServiceImpl extends BaseServiceImpl<RoleResource> implements RoleResourceService {
 
     private RoleResourceDao roleResourceDao;
@@ -34,11 +38,21 @@ public class RoleResourceServiceImpl extends BaseServiceImpl<RoleResource> imple
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void allocation(int roleId, Integer[] resourceIds) {
         if (Objects.isNull(resourceIds) || resourceIds.length < 1) {
             return;
         }
+
         Role role = this.roleDao.queryById(roleId);
+//        注意清空，否则重复数据太多
+        List<RoleResource> roleResources = this.roleResourceDao.queryByRole(role);
+        for (RoleResource r : roleResources) {
+            if (Objects.isNull(r))
+                continue;
+            this.roleResourceDao.delete(r.getId());
+        }
+        //重新建立关系
         for (int i = 0; i < resourceIds.length; i++) {
             RoleResource roleResource = new RoleResource();
             roleResource.setRole(role);

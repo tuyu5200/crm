@@ -1,7 +1,10 @@
 package com.crm.service.impl;
 
+import com.crm.dao.DeptDao;
 import com.crm.dao.RoleDao;
 import com.crm.dao.UserDao;
+import com.crm.entity.Company;
+import com.crm.entity.Dept;
 import com.crm.entity.Role;
 import com.crm.entity.User;
 import com.crm.service.UserService;
@@ -19,6 +22,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     private UserDao userDao;
     @Autowired
     private RoleDao roleDao;
+
+    @Autowired
+    private DeptDao deptDao;
 
     @Autowired
     public void setUserDao(UserDao userDao) {
@@ -47,9 +53,14 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     }
 
     @Override
-    public void allocRoles(Integer userId, Integer[] roleIds) {
+    public void allocRoles(Integer userId, Integer deptId, Integer[] roleIds, Company company) {
         if (!Objects.isNull(roleIds) && roleIds.length > 0) {
+            if (Objects.isNull(deptId))
+                throw new IllegalArgumentException("部门编号不能为空");
+            Dept dept = this.deptDao.queryById(deptId);
             User user = this.userDao.queryById(userId);
+            user.setDept(dept);
+            user.setCompany(company);
             user.getRoles().clear();
             List<Role> roleList = this.roleDao.queryByIds(roleIds);
             user.getRoles().addAll(roleList);

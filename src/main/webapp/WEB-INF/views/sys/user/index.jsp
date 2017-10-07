@@ -13,76 +13,22 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>用户登录</title>
+    <title>员工管理</title>
     <base href="<%=basePath%>">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">客户关系管理系统</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">用户管理 <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">角色管理</a></li>
-                <li><a href="#">资源管理</a></li>
-
-            </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">${sessionScope.user.username}<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">个人信息</a></li>
-                        <li><a href="#">修改密码</a></li>
-                        <li><a href="#">查看任务</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">安全退出</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <form class="navbar-form navbar-left pull-right" method="post" action="">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
-                </div>
-                <button type="submit" class="btn btn-default">搜索</button>
-            </form>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
+<jsp:include page="/WEB-INF/views/commons/navbar.jsp">
+    <jsp:param name="activeName" value="SYSTEM"/>
+</jsp:include>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">首页</h3>
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item"><a href="/sys/company/queryAll.do">公司管理</a></li>
-                    <li class="list-group-item"><a href="/sys/dept/queryAll.do?id=${user.id}">部门管理</a></li>
-                    <li class="list-group-item">菜单管理</li>
-                    <li class="list-group-item">服务管理</li>
-                    <li class="list-group-item active">用户管理</li>
-                    <li class="list-group-item"><a href="/sys/role/queryAll.do">角色管理</a></li>
-                </ul>
-                <div class="panel-body">
-                </div>
-            </div>
+            <jsp:include page="/WEB-INF/views/commons/leftpanel.jsp">
+                <jsp:param name="activeName" value="USER_MANAGE"/>
+            </jsp:include>
         </div>
         <div class="col-md-9">
             <div class="panel panel-default">
@@ -100,6 +46,7 @@
                         <td>员工编号</td>
                         <td>员工姓名</td>
                         <td>员工账号</td>
+                        <td>账号状态</td>
                         <td>邮箱</td>
                         <td>性别</td>
                         <td>员工职务</td>
@@ -109,27 +56,32 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${users}" var="role">
+                    <c:forEach items="${users}" var="user">
                         <tr>
-                            <td>${role.id}</td>
-                            <td>${role.name}</td>
-                            <td>${role.username}</td>
-                            <td>${role.email}</td>
-                            <td>${role.sex==1?'男':'女'}</td>
-                            <td>*</td>
-                            <td>${role.dept.dname}</td>
-                            <td>${role.company.cname}</td>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.username}</td>
+                            <td>
+                                <button class="btn btn-xs ${user.enabled==1?'btn-primary':'btn-danger'}">${user.enabled==1?'启用':'禁用'}</button>
+                            </td>
+                            <td>${user.email}</td>
+                            <td>${user.sex==1?'男':'女'}</td>
+                            <td><c:forEach items="${user.roles}" var="role">
+                                <button class="btn btn-default btn-xs">${role.name}</button>
+                            </c:forEach></td>
+                            <td>${user.dept.dname}</td>
+                            <td>${user.company.cname}</td>
                             <td>
                                 <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#allocRole"
-                                        data-id="${sessionScope.user.company.id}" data-username="${role.name}"
-                                        data-userId=${role.id}>
+                                        data-id="${sessionScope.user.company.id}" data-username="${user.name}"
+                                        data-userId=${user.id}>
                                     分配角色
                                 </button>
                                 <a class="btn btn-warning btn-xs"
-                                   href="/sys/user/dataEcho.do?userId=${role.id}">修改
+                                   href="/sys/user/dataEcho.do?userId=${user.id}">修改
                                 </a>
                                 <a class="btn btn-danger btn-xs" href="#"
-                                   data-href="/sys/user/deleteUser.do?userId=${role.id}" data-toggle="modal"
+                                   data-href="/sys/user/deleteUser.do?userId=${user.id}" data-toggle="modal"
                                    data-target="#confirm-delete">删除</a>
                             </td>
                         </tr>
@@ -244,7 +196,7 @@
                     <div class="row" style="margin-top: 5px">
                         <div class="col-sm-3">请选择部门</div>
                         <div class="col-sm-6">
-                            <select class="form-control" name="deptSelect" id="deptSelect">
+                            <select class="form-control" name="deptId" id="deptSelect">
                             </select>
                         </div>
                     </div>

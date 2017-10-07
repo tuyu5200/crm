@@ -13,7 +13,7 @@ import java.util.Set;
 @Table(name = "crm_client", schema = "crm")
 public class Client {
     private Integer id;
-    private Integer name;
+    private String name;
     private String legal;
     private Integer postcode;
     private String telephone;
@@ -45,11 +45,11 @@ public class Client {
 
     @Basic
     @Column(name = "name")
-    public Integer getName() {
+    public String getName() {
         return this.name;
     }
 
-    public void setName(Integer name) {
+    public void setName(String name) {
         this.name = name;
     }
 

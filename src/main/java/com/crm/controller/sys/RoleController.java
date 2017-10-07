@@ -2,10 +2,12 @@ package com.crm.controller.sys;
 
 import com.crm.beans.ResourceBean;
 import com.crm.beans.RoleBean;
+import com.crm.commons.ResourceConstantEnum;
 import com.crm.dao.RoleContantDao;
 import com.crm.entity.Resource;
 import com.crm.entity.Role;
 import com.crm.entity.RoleResource;
+import com.crm.security.annotation.Authorize;
 import com.crm.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,6 +46,7 @@ public class RoleController {
      * @param roleId
      * @return
      */
+    @Authorize(ResourceConstantEnum.SYS_ROLE_VIEW)
     @RequestMapping("resourceEhco.do")
     @ResponseBody
     public List<ResourceBean> resourceEhco(Integer roleId) {
@@ -74,6 +77,7 @@ public class RoleController {
      * @param roleId      角色的id
      * @param resourceIds 要分配的资源id数组
      */
+    @Authorize(ResourceConstantEnum.SYS_ROLE_ALLOC_RESOURCE)
     @RequestMapping("allocResource.do")
     public String allocation(Integer roleId, Integer[] resourceIds) {
         if (Objects.isNull(resourceIds) || Objects.isNull(roleId) || resourceIds.length < 1) {
@@ -88,6 +92,7 @@ public class RoleController {
      *
      * @return
      */
+    @Authorize(ResourceConstantEnum.SYS_ROLE_VIEW)
     @RequestMapping("queryAll.do")
     public ModelAndView queryAll() {
         ModelAndView modelAndView = new ModelAndView("sys/role/index.jsp", "roles", this.roleService.queryAll());
@@ -108,24 +113,28 @@ public class RoleController {
      * @param description
      * @return
      */
+    @Authorize(ResourceConstantEnum.SYS_ROLE_SAVE)
     @RequestMapping("add.do")
     public String addRole(String name, String roleContant, int enabled, int dept, int company, String description) {
         this.roleService.addRole(name, roleContant, enabled, dept, company, description);
         return "redirect:/sys/role/queryAll.do";
     }
 
+    @Authorize(ResourceConstantEnum.SYS_ROLE_UPDATE)
     @RequestMapping("update.do")
     public String update(int roleId, String name, String roleContant, int enabled, int dept, int company, String description) {
         this.roleService.update(roleId, name, roleContant, enabled, dept, company, description);
         return "redirect:/sys/role/queryAll.do";
     }
 
+    @Authorize(ResourceConstantEnum.SYS_ROLE_DELETE)
     @RequestMapping("delete.do")
     public String delete(int roleId) {
         this.roleService.delete(roleId);
         return "redirect:/sys/role/queryAll.do";
     }
 
+    @Authorize(ResourceConstantEnum.SYS_ROLE_VIEW)
     @RequestMapping("queryById.do")
     @ResponseBody
     public RoleBean queryById(int id) {

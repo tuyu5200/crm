@@ -13,7 +13,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>error page</title>
+    <title>没权限</title>
     <base href="<%=basePath%>">
     <style>
         body {
@@ -98,7 +98,7 @@
 <body>
 <p class="topimg"></p>
 <p class="link">
-    <a href="login.jsp" target="_self">&#9666;返回首页</a>
+    <a href="login.jsp" target="_self">&#9666;重新登陆</a>
     <a target="_self" href="javascript:void (0);" onClick="javascript:history.back(-1);">&#9666;返回上一页</a>
 </p>
 <dl class="texts">

@@ -1,5 +1,6 @@
 package com.crm.service;
 
+import com.crm.entity.Company;
 import com.crm.entity.User;
 import com.crm.service.base.BaseService;
 
@@ -43,6 +44,7 @@ public interface UserService extends BaseService<User> {
      * 为用户分配角色
      *
      * @param roleIds 角色id数组
+     * @param deptId  部门编号
      */
-    void allocRoles(Integer userId, Integer[] roleIds);
+    void allocRoles(Integer userId, Integer deptId, Integer[] roleIds, Company company);
 }
