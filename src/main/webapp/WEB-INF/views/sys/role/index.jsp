@@ -55,24 +55,24 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${roles}" var="user">
+                    <c:forEach items="${roles}" var="role">
                         <tr>
-                            <td>${user.id}</td>
-                            <td>${user.name}</td>
+                            <td>${role.id}</td>
+                            <td>${role.name}</td>
                             <td>
-                                <button class="btn btn-xs ${user.enabled==1?'btn-primary':'btn-danger'}">${user.enabled==1?'启用':'禁用'}</button>
+                                <button class="btn btn-xs ${role.enabled==1?'btn-primary':'btn-danger'}">${role.enabled==1?'启用':'禁用'}</button>
                             </td>
-                            <td>${user.dept.dname}</td>
-                            <td>${user.company.cname}</td>
+                            <td>${role.dept.dname}</td>
+                            <td>${role.company.cname}</td>
                             <td>
                                 <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#allocResource"
-                                        data-roleId="${user.id}" data-roleName="${user.name}">分配资源
+                                        data-roleId="${role.id}" data-roleName="${role.name}">分配资源
                                 </button>
                                 <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modifyRole"
-                                        data-id="${user.id}">修改
+                                        data-id="${role.id}">修改
                                 </button>
                                 <a class="btn btn-danger btn-xs" href="#"
-                                   data-href="/sys/role/delete.do?roleId=${user.id}" data-toggle="modal"
+                                   data-href="/sys/role/delete.do?roleId=${role.id}" data-toggle="modal"
                                    data-target="#confirm-delete">删除</a>
                             </td>
                         </tr>
@@ -398,6 +398,4 @@
             })
         })
     });
-
-
 </script>

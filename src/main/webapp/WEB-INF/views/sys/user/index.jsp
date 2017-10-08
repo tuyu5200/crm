@@ -56,32 +56,32 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${users}" var="user">
+                    <c:forEach items="${users}" var="role">
                         <tr>
-                            <td>${user.id}</td>
-                            <td>${user.name}</td>
-                            <td>${user.username}</td>
+                            <td>${role.id}</td>
+                            <td>${role.name}</td>
+                            <td>${role.username}</td>
                             <td>
-                                <button class="btn btn-xs ${user.enabled==1?'btn-primary':'btn-danger'}">${user.enabled==1?'启用':'禁用'}</button>
+                                <button class="btn btn-xs ${role.enabled==1?'btn-primary':'btn-danger'}">${role.enabled==1?'启用':'禁用'}</button>
                             </td>
-                            <td>${user.email}</td>
-                            <td>${user.sex==1?'男':'女'}</td>
-                            <td><c:forEach items="${user.roles}" var="role">
+                            <td>${role.email}</td>
+                            <td>${role.sex==1?'男':'女'}</td>
+                            <td><c:forEach items="${role.roles}" var="role">
                                 <button class="btn btn-default btn-xs">${role.name}</button>
                             </c:forEach></td>
-                            <td>${user.dept.dname}</td>
-                            <td>${user.company.cname}</td>
+                            <td>${role.dept.dname}</td>
+                            <td>${role.company.cname}</td>
                             <td>
                                 <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#allocRole"
-                                        data-id="${sessionScope.user.company.id}" data-username="${user.name}"
-                                        data-userId=${user.id}>
+                                        data-id="${sessionScope.user.company.id}" data-username="${role.name}"
+                                        data-userId=${role.id}>
                                     分配角色
                                 </button>
                                 <a class="btn btn-warning btn-xs"
-                                   href="/sys/user/dataEcho.do?userId=${user.id}">修改
+                                   href="/sys/user/dataEcho.do?userId=${role.id}">修改
                                 </a>
                                 <a class="btn btn-danger btn-xs" href="#"
-                                   data-href="/sys/user/deleteUser.do?userId=${user.id}" data-toggle="modal"
+                                   data-href="/sys/user/deleteUser.do?userId=${role.id}" data-toggle="modal"
                                    data-target="#confirm-delete">删除</a>
                             </td>
                         </tr>

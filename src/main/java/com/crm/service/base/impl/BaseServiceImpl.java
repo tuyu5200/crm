@@ -5,6 +5,7 @@ import com.crm.service.base.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author walker tu
@@ -23,6 +24,8 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     @Override
     public void save(T t) {
+        if (Objects.isNull(t))
+            throw new IllegalArgumentException("保存时参数不能为空");
         this.baseDao.save(t);
     }
 
@@ -33,6 +36,8 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     @Override
     public void update(T t) {
+        if (Objects.isNull(t))
+            throw new IllegalArgumentException("更新时参数不能为空");
         this.baseDao.update(t);
     }
 

@@ -11,4 +11,18 @@ import com.crm.service.base.BaseService;
  */
 public interface ClientService extends BaseService<Client> {
     void addClient(ClientBean clientBean);
+
+    /**
+     * 通过ids 数组 删除所有
+     *
+     * @param ids
+     */
+    void deleteByIds(Integer[] ids);
+
+    /**
+     * 修改客户
+     *
+     * @param clientBean
+     */
+    void updateClient(ClientBean clientBean);
 }
